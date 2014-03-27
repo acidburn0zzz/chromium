@@ -145,4 +145,54 @@ TEST_F(ExtensionComplexFeatureTest, MultipleRulesChannels) {
   }
 }
 
+TEST_F(ExtensionComplexFeatureTest, BlockedInServiceWorker) {
+  scoped_ptr<ComplexFeature::FeatureList> features(
+      new ComplexFeature::FeatureList());
+
+  // Rule: channel trunk, blocked_in_service_worker true.
+  scoped_ptr<SimpleFeature> simple_feature(new SimpleFeature());
+  scoped_ptr<base::DictionaryValue> rule(
+      DictionaryBuilder()
+      .Set("channel", "trunk")
+      .Set("blocked_in_service_worker", "true").Build());
+  simple_feature->Parse(rule.get());
+  features->push_back(simple_feature.release());
+
+  // Rule: channel stable, blocked_in_service_worker true.
+  simple_feature.reset(new SimpleFeature());
+  rule = DictionaryBuilder()
+      .Set("channel", "stable")
+      .Set("blocked_in_service_worker", "true").Build();
+  simple_feature->Parse(rule.get());
+  features->push_back(simple_feature.release());
+
+  scoped_ptr<ComplexFeature> feature(new ComplexFeature(features.Pass()));
+
+  EXPECT_TRUE(feature->IsBlockedInServiceWorker());
+}
+
+TEST_F(ExtensionComplexFeatureTest, NotBlockedInServiceWorker) {
+  scoped_ptr<ComplexFeature::FeatureList> features(
+      new ComplexFeature::FeatureList());
+
+  // Rule: channel trunk, blocked_in_service_worker true.
+  scoped_ptr<SimpleFeature> simple_feature(new SimpleFeature());
+  scoped_ptr<base::DictionaryValue> rule(
+      DictionaryBuilder()
+      .Set("channel", "trunk").Build());
+  simple_feature->Parse(rule.get());
+  features->push_back(simple_feature.release());
+
+  // Rule: channel stable, blocked_in_service_worker true.
+  simple_feature.reset(new SimpleFeature());
+  rule = DictionaryBuilder()
+      .Set("channel", "stable").Build();
+  simple_feature->Parse(rule.get());
+  features->push_back(simple_feature.release());
+
+  scoped_ptr<ComplexFeature> feature(new ComplexFeature(features.Pass()));
+
+  EXPECT_FALSE(feature->IsBlockedInServiceWorker());
+}
+
 }  // namespace

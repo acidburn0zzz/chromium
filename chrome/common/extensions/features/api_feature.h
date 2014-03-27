@@ -14,12 +14,15 @@ class APIFeature : public SimpleFeature {
   APIFeature();
   virtual ~APIFeature();
 
+  // extension::Feature:
   virtual bool IsInternal() const OVERRIDE;
+  virtual bool IsBlockedInServiceWorker() const OVERRIDE;
 
   virtual std::string Parse(const base::DictionaryValue* value) OVERRIDE;
 
  private:
   bool internal_;
+  bool blocked_in_service_worker_;
 };
 
 }  // extensions

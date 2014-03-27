@@ -493,6 +493,11 @@ bool SimpleFeature::IsInternal() const {
   return false;
 }
 
+bool SimpleFeature::IsBlockedInServiceWorker() const {
+  NOTREACHED();
+  return false;
+}
+
 bool SimpleFeature::IsIdInWhitelist(const std::string& extension_id) const {
   return IsIdInWhitelist(extension_id, whitelist_);
 }

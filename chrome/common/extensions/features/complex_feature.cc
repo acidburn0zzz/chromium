@@ -9,6 +9,14 @@ namespace extensions {
 ComplexFeature::ComplexFeature(scoped_ptr<FeatureList> features) {
   DCHECK_GT(features->size(), 0UL);
   features_.swap(*features);
+
+  // Verify IsBlockedInServiceWorker is consistent across all features.
+  bool first_blocked_in_service_worker =
+      features_[0]->IsBlockedInServiceWorker();
+  for (FeatureList::const_iterator it = features_.begin() + 1;
+       it != features_.end(); ++it) {
+    DCHECK(first_blocked_in_service_worker == (*it)->IsBlockedInServiceWorker());
+  }
 }
 
 ComplexFeature::~ComplexFeature() {
@@ -57,6 +65,20 @@ Feature::Availability ComplexFeature::IsAvailableToContext(
   return first_availability;
 }
 
+bool ComplexFeature::IsIdInWhitelist(const std::string& extension_id) const {
+  for (FeatureList::const_iterator it = features_.begin();
+       it != features_.end(); ++it) {
+    if ((*it)->IsIdInWhitelist(extension_id))
+      return true;
+  }
+  return false;
+}
+
+bool ComplexFeature::IsBlockedInServiceWorker() const {
+  // Constructor verifies that composed features are consistent.
+  return features_[0]->IsBlockedInServiceWorker();
+}
+
 std::set<Feature::Context>* ComplexFeature::GetContexts() {
   // TODO(justinlin): Current use cases for ComplexFeatures are simple (e.g.
   // allow API in dev channel for everyone but stable channel for a whitelist),
@@ -80,15 +102,6 @@ std::string ComplexFeature::GetAvailabilityMessage(AvailabilityResult result,
   // TODO(justinlin): Form some kind of combined availabilities/messages from
   // SimpleFeatures.
   return features_[0]->GetAvailabilityMessage(result, type, url, context);
-}
-
-bool ComplexFeature::IsIdInWhitelist(const std::string& extension_id) const {
-  for (FeatureList::const_iterator it = features_.begin();
-       it != features_.end(); ++it) {
-    if ((*it)->IsIdInWhitelist(extension_id))
-      return true;
-  }
-  return false;
 }
 
 }  // namespace extensions
