@@ -12,7 +12,6 @@
 #include "extensions/common/value_builder.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
-using base::FundamentalValue;
 using chrome::VersionInfo;
 using extensions::APIFeature;
 using extensions::ComplexFeature;
@@ -155,7 +154,7 @@ TEST_F(ExtensionComplexFeatureTest, BlockedInServiceWorker) {
   scoped_ptr<ComplexFeature::FeatureList> features(
       new ComplexFeature::FeatureList());
 
-  // Rule: channel trunk, blocked_in_service_worker true.
+  // Two feature rules, both with blocked_in_service_worker: true.
   scoped_ptr<SimpleFeature> api_feature(new APIFeature());
   api_feature->Parse(ParseJsonDictionaryWithSingleQuotes(
       "{"
@@ -164,7 +163,6 @@ TEST_F(ExtensionComplexFeatureTest, BlockedInServiceWorker) {
       "}").get());
   features->push_back(api_feature.release());
 
-  // Rule: channel stable, blocked_in_service_worker true.
   api_feature.reset(new APIFeature());
   api_feature->Parse(ParseJsonDictionaryWithSingleQuotes(
       "{"
