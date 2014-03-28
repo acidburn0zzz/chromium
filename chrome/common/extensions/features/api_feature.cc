@@ -6,8 +6,8 @@
 
 namespace extensions {
 
-APIFeature::APIFeature() : internal_(false), blocked_in_service_worker_(false) {
-}
+APIFeature::APIFeature()
+    : internal_(false), blocked_in_service_worker_(false) {}
 
 APIFeature::~APIFeature() {
 }

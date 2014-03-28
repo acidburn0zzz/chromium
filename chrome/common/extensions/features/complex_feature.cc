@@ -14,8 +14,11 @@ ComplexFeature::ComplexFeature(scoped_ptr<FeatureList> features) {
   bool first_blocked_in_service_worker =
       features_[0]->IsBlockedInServiceWorker();
   for (FeatureList::const_iterator it = features_.begin() + 1;
-       it != features_.end(); ++it) {
-    DCHECK(first_blocked_in_service_worker == (*it)->IsBlockedInServiceWorker()) << "Complex feature must have consistent values of blocked_in_service_worker across all sub features";
+       it != features_.end();
+       ++it) {
+    DCHECK(first_blocked_in_service_worker == (*it)->IsBlockedInServiceWorker())
+        << "Complex feature must have consistent values of "
+           "blocked_in_service_worker across all sub features.";
   }
 }
 
@@ -67,7 +70,8 @@ Feature::Availability ComplexFeature::IsAvailableToContext(
 
 bool ComplexFeature::IsIdInWhitelist(const std::string& extension_id) const {
   for (FeatureList::const_iterator it = features_.begin();
-       it != features_.end(); ++it) {
+       it != features_.end();
+       ++it) {
     if ((*it)->IsIdInWhitelist(extension_id))
       return true;
   }

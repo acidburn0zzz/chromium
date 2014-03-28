@@ -150,7 +150,8 @@ TEST_F(ExtensionComplexFeatureTest, MultipleRulesChannels) {
   }
 }
 
-// Tests a complex feature with blocked_in_service_worker returns true for IsBlockedInServiceWorker().
+// Tests a complex feature with blocked_in_service_worker returns true for
+// IsBlockedInServiceWorker().
 TEST_F(ExtensionComplexFeatureTest, BlockedInServiceWorker) {
   scoped_ptr<ComplexFeature::FeatureList> features(
       new ComplexFeature::FeatureList());
@@ -158,18 +159,18 @@ TEST_F(ExtensionComplexFeatureTest, BlockedInServiceWorker) {
   // Two feature rules, both with blocked_in_service_worker: true.
   scoped_ptr<SimpleFeature> api_feature(new APIFeature());
   api_feature->Parse(ParseJsonDictionaryWithSingleQuotes(
-      "{"
-      "  'channel': 'trunk',"
-      "  'blocked_in_service_worker': true"
-      "}").get());
+                         "{"
+                         "  'channel': 'trunk',"
+                         "  'blocked_in_service_worker': true"
+                         "}").get());
   features->push_back(api_feature.release());
 
   api_feature.reset(new APIFeature());
   api_feature->Parse(ParseJsonDictionaryWithSingleQuotes(
-      "{"
-      "  'channel': 'stable',"
-      "  'blocked_in_service_worker': true"
-      "}").get());
+                         "{"
+                         "  'channel': 'stable',"
+                         "  'blocked_in_service_worker': true"
+                         "}").get());
   features->push_back(api_feature.release());
 
   scoped_ptr<ComplexFeature> feature(new ComplexFeature(features.Pass()));
@@ -177,7 +178,8 @@ TEST_F(ExtensionComplexFeatureTest, BlockedInServiceWorker) {
   EXPECT_TRUE(feature->IsBlockedInServiceWorker());
 }
 
-// Tests a complex feature without blocked_in_service_worker returns false for IsBlockedInServiceWorker().
+// Tests a complex feature without blocked_in_service_worker returns false for
+// IsBlockedInServiceWorker().
 TEST_F(ExtensionComplexFeatureTest, NotBlockedInServiceWorker) {
   scoped_ptr<ComplexFeature::FeatureList> features(
       new ComplexFeature::FeatureList());
@@ -185,16 +187,16 @@ TEST_F(ExtensionComplexFeatureTest, NotBlockedInServiceWorker) {
   // Two feature rules without blocked_in_service_worker.
   scoped_ptr<SimpleFeature> api_feature(new APIFeature());
   api_feature->Parse(ParseJsonDictionaryWithSingleQuotes(
-      "{"
-      "  'channel': 'trunk'"
-      "}").get());
+                         "{"
+                         "  'channel': 'trunk'"
+                         "}").get());
   features->push_back(api_feature.release());
 
   api_feature.reset(new APIFeature());
   api_feature->Parse(ParseJsonDictionaryWithSingleQuotes(
-      "{"
-      "  'channel': 'stable'"
-      "}").get());
+                         "{"
+                         "  'channel': 'stable'"
+                         "}").get());
   features->push_back(api_feature.release());
 
   scoped_ptr<ComplexFeature> feature(new ComplexFeature(features.Pass()));
@@ -202,7 +204,8 @@ TEST_F(ExtensionComplexFeatureTest, NotBlockedInServiceWorker) {
   EXPECT_FALSE(feature->IsBlockedInServiceWorker());
 }
 
-// Tests that a complex feature composing different values for blocked_in_service_worker will DCHECK.
+// Tests that a complex feature composing different values for
+// blocked_in_service_worker will DCHECK.
 #if (!defined(NDEBUG) || defined(DCHECK_ALWAYS_ON)) && GTEST_HAS_DEATH_TEST
 TEST_F(ExtensionComplexFeatureTest, MixedBlockedInServiceWorker) {
   scoped_ptr<ComplexFeature::FeatureList> features(
@@ -211,20 +214,22 @@ TEST_F(ExtensionComplexFeatureTest, MixedBlockedInServiceWorker) {
   // mixed blocked_in_service_worker.
   scoped_ptr<SimpleFeature> api_feature(new APIFeature());
   api_feature->Parse(ParseJsonDictionaryWithSingleQuotes(
-      "{"
-      "  'channel': 'trunk',"
-      "  'blocked_in_service_worker': true"
-      "}").get());
+                         "{"
+                         "  'channel': 'trunk',"
+                         "  'blocked_in_service_worker': true"
+                         "}").get());
   features->push_back(api_feature.release());
 
   api_feature.reset(new APIFeature());
   api_feature->Parse(ParseJsonDictionaryWithSingleQuotes(
-      "{"
-      "  'channel': 'stable'"
-      "}").get());
+                         "{"
+                         "  'channel': 'stable'"
+                         "}").get());
   features->push_back(api_feature.release());
 
-  ASSERT_DEATH(scoped_ptr<ComplexFeature> feature(new ComplexFeature(features.Pass())), "");
+  ASSERT_DEATH(
+      scoped_ptr<ComplexFeature> feature(new ComplexFeature(features.Pass())),
+      "");
 }
 #endif
 
