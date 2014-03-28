@@ -8,6 +8,7 @@
 #include "chrome/common/extensions/features/api_feature.h"
 #include "chrome/common/extensions/features/feature_channel.h"
 #include "chrome/common/extensions/features/simple_feature.h"
+#include "extensions/common/test_util.h"
 #include "extensions/common/value_builder.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
@@ -21,6 +22,7 @@ using extensions::ListBuilder;
 using extensions::Manifest;
 using extensions::ScopedCurrentChannel;
 using extensions::SimpleFeature;
+using extensions::test_util::ParseJsonDictionaryWithSingleQuotes;
 
 namespace {
 
@@ -167,7 +169,7 @@ TEST_F(ExtensionComplexFeatureTest, BlockedInServiceWorker) {
   api_feature.reset(new APIFeature());
   rule = DictionaryBuilder()
       .Set("channel", "stable")
-      .Set("blocked_in_service_worker", new FundamentalValue(true)).Build();
+      .Set("blocked_in_service_worker", true).Build();
   api_feature->Parse(rule.get());
   features->push_back(api_feature.release());
 
