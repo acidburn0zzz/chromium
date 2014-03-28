@@ -155,10 +155,11 @@ TEST_F(ExtensionComplexFeatureTest, BlockedInServiceWorker) {
 
   // Rule: channel trunk, blocked_in_service_worker true.
   scoped_ptr<SimpleFeature> api_feature(new APIFeature());
-  scoped_ptr<base::DictionaryValue> rule(
-      DictionaryBuilder()
-      .Set("channel", "trunk")
-      .Set("blocked_in_service_worker", new FundamentalValue(true)).Build());
+  scoped_ptr<base::DictionaryValue> rule(ParseJsonDictionaryWithSingleQuotes(
+      "{"
+      "  'channel': 'trunk',"
+      "  'blocked_in_service_worker': true"
+      "}"));
   api_feature->Parse(rule.get());
   features->push_back(api_feature.release());
 
