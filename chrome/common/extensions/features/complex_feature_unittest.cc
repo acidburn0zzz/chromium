@@ -200,4 +200,29 @@ TEST_F(ExtensionComplexFeatureTest, NotBlockedInServiceWorker) {
   EXPECT_FALSE(feature->IsBlockedInServiceWorker());
 }
 
+TEST_F(ExtensionComplexFeatureTest, MixedBlockedInServiceWorker) {
+  scoped_ptr<ComplexFeature::FeatureList> features(
+      new ComplexFeature::FeatureList());
+
+  // mixed blocked_in_service_worker.
+  scoped_ptr<SimpleFeature> api_feature(new APIFeature());
+  api_feature->Parse(ParseJsonDictionaryWithSingleQuotes(
+      "{"
+      "  'channel': 'trunk',"
+      "  'blocked_in_service_worker': true"
+      "}").get());
+  features->push_back(api_feature.release());
+
+  api_feature.reset(new APIFeature());
+  api_feature->Parse(ParseJsonDictionaryWithSingleQuotes(
+      "{"
+      "  'channel': 'stable'"
+      "}").get());
+  features->push_back(api_feature.release());
+
+  scoped_ptr<ComplexFeature> feature(new ComplexFeature(features.Pass()));
+
+  EXPECT_FALSE(feature->IsBlockedInServiceWorker());
+}
+
 }  // namespace

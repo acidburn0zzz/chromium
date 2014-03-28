@@ -15,7 +15,7 @@ ComplexFeature::ComplexFeature(scoped_ptr<FeatureList> features) {
       features_[0]->IsBlockedInServiceWorker();
   for (FeatureList::const_iterator it = features_.begin() + 1;
        it != features_.end(); ++it) {
-    DCHECK(first_blocked_in_service_worker == (*it)->IsBlockedInServiceWorker());
+    DCHECK(first_blocked_in_service_worker == (*it)->IsBlockedInServiceWorker()) << "Complex feature must have consistent values of blocked_in_service_worker across all sub features";
   }
 }
 
@@ -75,7 +75,8 @@ bool ComplexFeature::IsIdInWhitelist(const std::string& extension_id) const {
 }
 
 bool ComplexFeature::IsBlockedInServiceWorker() const {
-  // Constructor verifies that composed features are consistent.
+  // Constructor verifies that composed features are consistent, thus we can
+  // return just the first feature's value.
   return features_[0]->IsBlockedInServiceWorker();
 }
 
