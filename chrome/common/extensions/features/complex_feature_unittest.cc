@@ -4,7 +4,6 @@
 
 #include "chrome/common/extensions/features/complex_feature.h"
 
-#include "base/values.h"
 #include "chrome/common/extensions/features/api_feature.h"
 #include "chrome/common/extensions/features/feature_channel.h"
 #include "chrome/common/extensions/features/simple_feature.h"
