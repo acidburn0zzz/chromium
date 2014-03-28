@@ -150,6 +150,7 @@ TEST_F(ExtensionComplexFeatureTest, MultipleRulesChannels) {
   }
 }
 
+// Tests a complex feature with blocked_in_service_worker returns true for IsBlockedInServiceWorker().
 TEST_F(ExtensionComplexFeatureTest, BlockedInServiceWorker) {
   scoped_ptr<ComplexFeature::FeatureList> features(
       new ComplexFeature::FeatureList());
@@ -176,6 +177,7 @@ TEST_F(ExtensionComplexFeatureTest, BlockedInServiceWorker) {
   EXPECT_TRUE(feature->IsBlockedInServiceWorker());
 }
 
+// Tests a complex feature without blocked_in_service_worker returns false for IsBlockedInServiceWorker().
 TEST_F(ExtensionComplexFeatureTest, NotBlockedInServiceWorker) {
   scoped_ptr<ComplexFeature::FeatureList> features(
       new ComplexFeature::FeatureList());
@@ -200,6 +202,8 @@ TEST_F(ExtensionComplexFeatureTest, NotBlockedInServiceWorker) {
   EXPECT_FALSE(feature->IsBlockedInServiceWorker());
 }
 
+// Tests that a complex feature composing different values for blocked_in_service_worker will DCHECK.
+#if (!defined(NDEBUG) || defined(DCHECK_ALWAYS_ON)) && GTEST_HAS_DEATH_TEST
 TEST_F(ExtensionComplexFeatureTest, MixedBlockedInServiceWorker) {
   scoped_ptr<ComplexFeature::FeatureList> features(
       new ComplexFeature::FeatureList());
@@ -220,9 +224,8 @@ TEST_F(ExtensionComplexFeatureTest, MixedBlockedInServiceWorker) {
       "}").get());
   features->push_back(api_feature.release());
 
-  scoped_ptr<ComplexFeature> feature(new ComplexFeature(features.Pass()));
-
-  EXPECT_FALSE(feature->IsBlockedInServiceWorker());
+  ASSERT_DEATH(scoped_ptr<ComplexFeature> feature(new ComplexFeature(features.Pass())), "");
 }
+#endif
 
 }  // namespace
