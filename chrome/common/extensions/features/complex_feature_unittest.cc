@@ -4,12 +4,16 @@
 
 #include "chrome/common/extensions/features/complex_feature.h"
 
+#include "base/values.h"
+#include "chrome/common/extensions/features/api_feature.h"
 #include "chrome/common/extensions/features/feature_channel.h"
 #include "chrome/common/extensions/features/simple_feature.h"
 #include "extensions/common/value_builder.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
+using base::FundamentalValue;
 using chrome::VersionInfo;
+using extensions::APIFeature;
 using extensions::ComplexFeature;
 using extensions::DictionaryBuilder;
 using extensions::Feature;
@@ -150,21 +154,21 @@ TEST_F(ExtensionComplexFeatureTest, BlockedInServiceWorker) {
       new ComplexFeature::FeatureList());
 
   // Rule: channel trunk, blocked_in_service_worker true.
-  scoped_ptr<SimpleFeature> simple_feature(new SimpleFeature());
+  scoped_ptr<SimpleFeature> api_feature(new APIFeature());
   scoped_ptr<base::DictionaryValue> rule(
       DictionaryBuilder()
       .Set("channel", "trunk")
-      .Set("blocked_in_service_worker", "true").Build());
-  simple_feature->Parse(rule.get());
-  features->push_back(simple_feature.release());
+      .Set("blocked_in_service_worker", new FundamentalValue(true)).Build());
+  api_feature->Parse(rule.get());
+  features->push_back(api_feature.release());
 
   // Rule: channel stable, blocked_in_service_worker true.
-  simple_feature.reset(new SimpleFeature());
+  api_feature.reset(new APIFeature());
   rule = DictionaryBuilder()
       .Set("channel", "stable")
-      .Set("blocked_in_service_worker", "true").Build();
-  simple_feature->Parse(rule.get());
-  features->push_back(simple_feature.release());
+      .Set("blocked_in_service_worker", new FundamentalValue(true)).Build();
+  api_feature->Parse(rule.get());
+  features->push_back(api_feature.release());
 
   scoped_ptr<ComplexFeature> feature(new ComplexFeature(features.Pass()));
 

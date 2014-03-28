@@ -26,7 +26,9 @@ std::string APIFeature::Parse(const base::DictionaryValue* value) {
     return error;
 
   value->GetBoolean("internal", &internal_);
-  value->GetBoolean("blocked_in_service_worker", &blocked_in_service_worker_);
+  bool got = value->GetBoolean("blocked_in_service_worker", &blocked_in_service_worker_);
+  LOG(WARNING) << *value;
+  fprintf(stderr, "%s:%s:%d %s blocked_in_service_worker %d\n", __FILE__, __FUNCTION__, __LINE__, got ? "got" : "didn't get", blocked_in_service_worker_);
 
   if (GetContexts()->empty())
     return name() + ": API features must specify at least one context.";

@@ -494,7 +494,6 @@ bool SimpleFeature::IsInternal() const {
 }
 
 bool SimpleFeature::IsBlockedInServiceWorker() const {
-  NOTREACHED();
   return false;
 }
 
