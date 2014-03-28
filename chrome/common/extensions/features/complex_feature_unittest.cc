@@ -157,20 +157,20 @@ TEST_F(ExtensionComplexFeatureTest, BlockedInServiceWorker) {
 
   // Rule: channel trunk, blocked_in_service_worker true.
   scoped_ptr<SimpleFeature> api_feature(new APIFeature());
-  scoped_ptr<base::DictionaryValue> rule(ParseJsonDictionaryWithSingleQuotes(
+  api_feature->Parse(ParseJsonDictionaryWithSingleQuotes(
       "{"
       "  'channel': 'trunk',"
       "  'blocked_in_service_worker': true"
-      "}"));
-  api_feature->Parse(rule.get());
+      "}").get());
   features->push_back(api_feature.release());
 
   // Rule: channel stable, blocked_in_service_worker true.
   api_feature.reset(new APIFeature());
-  rule = DictionaryBuilder()
-      .Set("channel", "stable")
-      .Set("blocked_in_service_worker", true).Build();
-  api_feature->Parse(rule.get());
+  api_feature->Parse(ParseJsonDictionaryWithSingleQuotes(
+      "{"
+      "  'channel': 'stable',"
+      "  'blocked_in_service_worker': true"
+      "}").get());
   features->push_back(api_feature.release());
 
   scoped_ptr<ComplexFeature> feature(new ComplexFeature(features.Pass()));
